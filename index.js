@@ -9,23 +9,7 @@ import dalleRoutes from './routes/dalleRoutes.js';
 dotenv.config();
 
 const app = express();
-
-//Configurar CORS
-
-const whitelist = [process.env.FRONTEND_URL];
-
-const corsOptions = {
-    origin: function(origin, callback){
-        if(whitelist.includes(origin)) {
-            callback(null, true)
-        } else {
-            callback(new Error('Error de Cors'))
-        }
-    }
-};
-
-app.use(cors(corsOptions));
-
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.use('/api/v1/post', postRoutes);
@@ -35,12 +19,10 @@ app.get('/', async(req, res) => {
     res.send('Hola desde DALL-E!');
 });
 
-const PORT = process.env.PORT || 4000;
-
 const startServer = async() => {
     try {
         connectDB(process.env.MONGODB_URL);
-        app.listen(PORT, () => {
+        app.listen(8080, () => {
             console.log('Servidor corriendo en el puerto http://localhost:8080');
         });
     } catch (error) {
